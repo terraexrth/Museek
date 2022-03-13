@@ -29,12 +29,13 @@ class UploadFragment : Fragment() {
     private lateinit var uploadViewModel: UploadViewModel
     private lateinit var mAuth: FirebaseAuth
 
-    var selectBtn: Button? = null
+    var selectBtn: ImageView? = null
     var uploadBtn: Button? = null
-    var selectAudio: Button? = null
+    var selectAudio: ImageView? = null
     var imgStore: ImageView? = null
     var fileLoc: TextView? = null
     var title: EditText? = null
+    var textUpload:ImageView? = null
     lateinit var ImgUri: Uri
     lateinit var AudioUri: Uri
 
@@ -61,16 +62,18 @@ class UploadFragment : Fragment() {
             ViewModelProvider(this).get(UploadViewModel::class.java)
         val root = inflater.inflate(R.layout.upload_fragment, container, false)
         mAuth = FirebaseAuth.getInstance()
-        selectBtn = root.findViewById(R.id.selectBtn) as Button
+        selectBtn = root.findViewById(R.id.selectBtn) as ImageView
         uploadBtn = root.findViewById(R.id.uploadBtn) as Button
-        selectAudio = root.findViewById(R.id.selectAudio) as Button
+        selectAudio = root.findViewById(R.id.selectAudio) as ImageView
         imgStore = root.findViewById(R.id.imgUpload) as ImageView
         fileLoc = root.findViewById(R.id.musicTitle) as TextView
         title = root.findViewById(R.id.musicName) as EditText
+        textUpload = root.findViewById(R.id.textUpload) as ImageView
 
 
         selectBtn!!.setOnClickListener {
             selectImage()
+
         }
         selectAudio!!.setOnClickListener {
             selectAudio()
@@ -111,7 +114,7 @@ class UploadFragment : Fragment() {
             storageReference.downloadUrl.addOnSuccessListener(OnSuccessListener { uri ->
                 val dbRef: DatabaseReference = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
-                    .child("Music").child("$audName")
+                    .child("Music").child("New").child("$audName")
 
                 hashMap1.put("name", audName.toString())
                 hashMap1.put("artist", currentUser?.displayName.toString())
@@ -121,6 +124,9 @@ class UploadFragment : Fragment() {
 
             })
             imgStore!!.setImageURI(null)
+            selectBtn!!.visibility = View.VISIBLE
+            textUpload!!.visibility = View.VISIBLE
+
             if (progressDialog.isShowing) progressDialog.dismiss()
 
         }.addOnFailureListener {
@@ -132,7 +138,7 @@ class UploadFragment : Fragment() {
             audioRef.downloadUrl.addOnSuccessListener(OnSuccessListener { uri ->
                 val dbRef2: DatabaseReference = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
-                    .child("Music").child("$audName")
+                    .child("Music").child("New").child("$audName")
                 // val hashMap2: HashMap<String, String> = HashMap()
                 hashMap1.put("songUrl", uri.toString())
                 dbRef2.setValue(hashMap1)
@@ -166,10 +172,13 @@ class UploadFragment : Fragment() {
         if (requestCode == 0 && resultCode == AppCompatActivity.RESULT_OK) {
             ImgUri = data?.data!!
             imgStore!!.setImageURI(ImgUri)
+            selectBtn!!.visibility = View.GONE
+            textUpload!!.visibility = View.GONE
         }
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             AudioUri = data?.data!!
-            fileLoc!!.text = AudioUri.toString()
+            selectAudio!!.visibility = View.GONE
+            fileLoc!!.text = ("File Location :  ${AudioUri.toString()}")
 
         }
     }

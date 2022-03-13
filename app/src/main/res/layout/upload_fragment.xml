@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main"
     tools:context=".fragments.upload.UploadFragment">
     <FrameLayout
         android:id="@+id/fragment_container"
@@ -11,84 +12,126 @@
         android:layout_height="match_parent"
         />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Upload"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.039" />
-
     <ImageView
         android:id="@+id/imgUpload"
-        android:layout_width="276dp"
-        android:layout_height="259dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:src="@drawable/upload_frame"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.139"
+
+        />
+
+    <ImageView
+        android:id="@+id/textUpload"
+        android:layout_width="223dp"
+        android:layout_height="195dp"
+        android:src="@drawable/imgtext_upload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2"
-        app:layout_constraintVertical_bias="0.077" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.307" />
 
-    <Button
+    <ImageView
         android:id="@+id/selectBtn"
-        android:layout_width="170dp"
-        android:layout_height="48dp"
-        android:text="SELECT COVER"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgUpload"
-        app:layout_constraintVertical_bias="0.043" />
+        android:layout_width="174dp"
+        android:layout_height="122dp"
+        android:src="@drawable/cloud"
 
-    <Button
+        app:layout_constraintBottom_toBottomOf="@+id/imgUpload"
+        app:layout_constraintEnd_toEndOf="@+id/imgUpload"
+        app:layout_constraintHorizontal_bias="0.523"
+        app:layout_constraintStart_toStartOf="@+id/imgUpload"
+        app:layout_constraintTop_toTopOf="@+id/imgUpload"
+        app:layout_constraintVertical_bias="0.297" />
+
+    <ImageView
         android:id="@+id/selectAudio"
-        android:layout_width="170dp"
-        android:layout_height="48dp"
-        android:text="SELECT AUDIO"
+        android:layout_width="185dp"
+        android:layout_height="57dp"
+        android:clickable="true"
+        android:src="@drawable/audioupload"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgUpload"
-        app:layout_constraintVertical_bias="0.242" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.559" />
 
     <Button
         android:id="@+id/uploadBtn"
-        android:layout_width="157dp"
-        android:layout_height="49dp"
+        android:layout_width="112dp"
+        android:layout_height="51dp"
         android:text="Upload"
+        app:cornerRadius="80dp"
+        android:backgroundTint="#8ae0ff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.531"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectBtn"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.954" />
 
     <TextView
         android:id="@+id/musicTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="None of file"
-        app:layout_constraintBottom_toTopOf="@+id/uploadBtn"
+        android:layout_width="170dp"
+        android:layout_height="40dp"
+        android:alpha="0.5"
+        android:textColor="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectAudio"
-        app:layout_constraintVertical_bias="0.211" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.57" />
 
     <EditText
         android:id="@+id/musicName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:backgroundTint="@color/white"
         android:ems="10"
+        android:fontFamily="@font/prompt_thin"
         android:hint="ชื่อเพลง"
         android:inputType="textPersonName"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/uploadBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/musicTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/musicTitle"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="275dp"
+        android:layout_height="264dp"
+        android:src="@drawable/audioframe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.595" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/prompt_semibold"
+        android:text="Track Title"
+
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.161"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.69" />
 </androidx.constraintlayout.widget.ConstraintLayout>

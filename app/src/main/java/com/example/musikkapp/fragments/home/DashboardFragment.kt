@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.musikkapp.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -21,8 +18,10 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardViewmodel: DashboardViewModel
     private lateinit var mAuth: FirebaseAuth
     private lateinit var dbRef: DatabaseReference
-    private lateinit var musicRecyclerView: RecyclerView
-    private lateinit var musicArrayList: ArrayList<Music>
+    private lateinit var musicRecRecyclerView: RecyclerView
+    private lateinit var musicRecArrayList: ArrayList<Music>
+    private lateinit var musicNewRecyclerView: RecyclerView
+    private lateinit var musicNewArrayList: ArrayList<Music>
     var rec1 : ImageView? = null
 
 
@@ -37,17 +36,25 @@ class DashboardFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
         val currentUser = mAuth.currentUser
 
-        musicRecyclerView = root.findViewById(R.id.musicList)
-        musicRecyclerView.layoutManager = LinearLayoutManager(activity)
-        musicRecyclerView.setHasFixedSize(true)
+        musicRecRecyclerView = root.findViewById(R.id.musicList)
+        musicRecRecyclerView.layoutManager = LinearLayoutManager(activity,
+            RecyclerView.HORIZONTAL,false)
+        musicRecRecyclerView.setHasFixedSize(true)
 
-        musicArrayList = arrayListOf<Music>()
+        musicRecArrayList = arrayListOf<Music>()
         getUserData()
+
+        musicNewRecyclerView = root.findViewById(R.id.musicList2)
+        musicNewRecyclerView.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
+        musicNewRecyclerView.setHasFixedSize(true)
+
+        musicNewArrayList = arrayListOf<Music>()
+        getNewData()
 
         return root
     }
     private fun getUserData(){
-        dbRef = FirebaseDatabase.getInstance().getReference("Music")
+        dbRef = FirebaseDatabase.getInstance().getReference("Music").child("Recommend")
 
         dbRef.addValueEventListener(object : ValueEventListener{
 
@@ -56,10 +63,33 @@ class DashboardFragment : Fragment() {
                     for(userSnapshot in snapshot.children){
 
                         val music = userSnapshot.getValue(Music::class.java)
-                        musicArrayList.add(music!!)
+                        musicRecArrayList.add(music!!)
 
                     }
-                    musicRecyclerView.adapter = MyAdapter(musicArrayList)
+                    musicRecRecyclerView.adapter = MyAdapter(musicRecArrayList)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+    private fun getNewData(){
+        dbRef = FirebaseDatabase.getInstance().getReference("Music").child("New")
+
+        dbRef.addValueEventListener(object : ValueEventListener{
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(snapshot.exists()){
+                    for(userSnapshot in snapshot.children){
+
+                        val music = userSnapshot.getValue(Music::class.java)
+                        musicNewArrayList.add(music!!)
+
+                    }
+                    musicNewRecyclerView.adapter = MyAdapter(musicNewArrayList)
                 }
             }
 
