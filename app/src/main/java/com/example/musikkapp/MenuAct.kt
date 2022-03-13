@@ -39,6 +39,7 @@ class MenuAct : AppCompatActivity() {
 
         profileImg = findViewById<ImageView>(R.id.profile_float)
 
+
         profileImg?.let { Glide.with(this).load(currentUser?.photoUrl).into(it) }
 
         profileImg!!.setOnClickListener {
