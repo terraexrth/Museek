@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "574497660797",
+    "firebase_url": "https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "museek-a09de",
+    "storage_bucket": "museek-a09de.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574497660797:android:2cb51aaa0691ac07c8b614",
+        "android_client_info": {
+          "package_name": "com.example.museek"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574497660797-4q2jln3upmo92dokfsfs8gvfjmcamsqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzau7sdyfkFDl6QWqvt5ieZlSXsETjUYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574497660797-4q2jln3upmo92dokfsfs8gvfjmcamsqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574497660797:android:1b4716b60687a12bc8b614",
+        "android_client_info": {
+          "package_name": "com.example.musiikkkk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574497660797-4q2jln3upmo92dokfsfs8gvfjmcamsqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzau7sdyfkFDl6QWqvt5ieZlSXsETjUYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574497660797-4q2jln3upmo92dokfsfs8gvfjmcamsqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574497660797:android:1a23cae7e5d1df2ec8b614",
+        "android_client_info": {
+          "package_name": "com.example.musikkapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574497660797-4q2jln3upmo92dokfsfs8gvfjmcamsqg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzau7sdyfkFDl6QWqvt5ieZlSXsETjUYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574497660797-4q2jln3upmo92dokfsfs8gvfjmcamsqg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
