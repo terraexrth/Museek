@@ -13,17 +13,37 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:src="@color/main"
-            android:id="@+id/thumbnail"
-            android:layout_width="95dp"
-            android:layout_height="95dp"
+            android:id="@+id/cover_img"
+            android:layout_width="88dp"
+            android:layout_height="88dp"
             android:layout_gravity="right"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY" />
 
-        <TextView
-            android:id="@+id/nameText"
-            android:layout_width="303dp"
-            android:layout_height="match_parent" />
+        <LinearLayout
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/titleSong"
+                android:layout_width="303dp"
+                android:layout_height="30dp"
+                android:text="SONG NAME"
+                android:textSize="18dp"
+                android:fontFamily="@font/prompt_semibold"
+                android:paddingLeft="8dp" />
+
+            <TextView
+                android:id="@+id/artistSong"
+                android:layout_width="303dp"
+                android:layout_height="30dp"
+                android:text="TERRA"
+                android:textSize="15dp"
+                android:fontFamily="@font/prompt_semibold"
+                android:paddingLeft="8dp" />
+
+        </LinearLayout>
+
 
 
 

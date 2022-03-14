@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 
 import com.example.musikkapp.fragments.home.DashboardFragment
+import com.example.musikkapp.fragments.playlist.LibaryFragment
 import com.example.musikkapp.fragments.upload.UploadFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +23,7 @@ class MenuAct : AppCompatActivity() {
 
     private val dashboardFragment = DashboardFragment()
     private val uploadFragment = UploadFragment()
+    private val libaryFragment = LibaryFragment()
     var profileImg: ImageView? = null
     private lateinit var mAuth: FirebaseAuth
 
@@ -69,7 +71,7 @@ class MenuAct : AppCompatActivity() {
             bottom_navigation.setOnNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.ic_home -> replaceFragment(dashboardFragment)
-                    R.id.ic_upload -> replaceFragment(uploadFragment)
+                    R.id.ic_upload -> replaceFragment(libaryFragment)
                 }
                 true
             }

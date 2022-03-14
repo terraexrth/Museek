@@ -7,12 +7,12 @@
 
     tools:context=".fragments.upload.UploadFragment">
 
-    <!-- <FrameLayout
+     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </FrameLayout>-->
+    </FrameLayout>
 
     <TextView
         android:id="@+id/upload_back"
