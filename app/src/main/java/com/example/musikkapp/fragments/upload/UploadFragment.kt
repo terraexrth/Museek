@@ -1,28 +1,27 @@
 package com.example.musikkapp.fragments.upload
 
+import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.musikkapp.MenuAct
 import com.example.musikkapp.R
 import com.example.musikkapp.fragments.home.DashboardFragment
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.net.MediaType
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.HashMap
 
 
 class UploadFragment : Fragment() {
@@ -34,8 +33,9 @@ class UploadFragment : Fragment() {
     var selectAudio: ImageView? = null
     var imgStore: ImageView? = null
     var fileLoc: TextView? = null
+    var back:TextView? = null
     var title: EditText? = null
-    var textUpload:ImageView? = null
+    var textUpload: ImageView? = null
     lateinit var ImgUri: Uri
     lateinit var AudioUri: Uri
 
@@ -69,7 +69,11 @@ class UploadFragment : Fragment() {
         fileLoc = root.findViewById(R.id.musicTitle) as TextView
         title = root.findViewById(R.id.musicName) as EditText
         textUpload = root.findViewById(R.id.textUpload) as ImageView
+        back = root.findViewById(R.id.upload_back) as TextView
 
+        back!!.setOnClickListener {
+            replaceFragment()
+        }
 
         selectBtn!!.setOnClickListener {
             selectImage()
@@ -77,9 +81,11 @@ class UploadFragment : Fragment() {
         }
         selectAudio!!.setOnClickListener {
             selectAudio()
+
         }
         uploadBtn!!.setOnClickListener {
             upload()
+
         }
 
 
@@ -91,6 +97,7 @@ class UploadFragment : Fragment() {
         transaction!!.replace(R.id.fragment_container, DashboardFragment())
         transaction.disallowAddToBackStack()
         transaction.commit()
+
     }
 
     private fun upload() {
@@ -115,12 +122,18 @@ class UploadFragment : Fragment() {
                 val dbRef: DatabaseReference = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .child("Music").child("New").child("$audName")
+                val usRef: DatabaseReference = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
+                    .child("User").child("${currentUser?.uid.toString()}").child("$audName")
 
                 hashMap1.put("name", audName.toString())
                 hashMap1.put("artist", currentUser?.displayName.toString())
                 hashMap1.put("coverUrl", uri.toString())
+                hashMap1.put("timestamp",now.toString())
+
 
                 dbRef.setValue(hashMap1)
+                usRef.setValue(hashMap1)
 
             })
             imgStore!!.setImageURI(null)
@@ -139,9 +152,13 @@ class UploadFragment : Fragment() {
                 val dbRef2: DatabaseReference = FirebaseDatabase.getInstance()
                     .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .child("Music").child("New").child("$audName")
+                val usRef: DatabaseReference = FirebaseDatabase.getInstance()
+                    .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
+                    .child("User").child(currentUser?.uid.toString()).child("$audName")
                 // val hashMap2: HashMap<String, String> = HashMap()
                 hashMap1.put("songUrl", uri.toString())
                 dbRef2.setValue(hashMap1)
+                usRef.setValue(hashMap1)
             })
             title!!.setText("")
             if (progressDialog.isShowing) progressDialog.dismiss()
@@ -172,6 +189,8 @@ class UploadFragment : Fragment() {
         if (requestCode == 0 && resultCode == AppCompatActivity.RESULT_OK) {
             ImgUri = data?.data!!
             imgStore!!.setImageURI(ImgUri)
+
+
             selectBtn!!.visibility = View.GONE
             textUpload!!.visibility = View.GONE
         }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,30 +11,29 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/musicList"
         android:layout_width="385dp"
-        android:layout_height="160dp"
+        android:layout_height="210dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.353"
+        app:layout_constraintVertical_bias="0.421"
         app:reverseLayout="true"
         app:stackFromEnd="true"
         tools:listitem="@layout/music_item" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/musicList2"
         android:layout_width="385dp"
-        android:layout_height="160dp"
+        android:layout_height="210dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.695"
+        app:layout_constraintVertical_bias="0.879"
         app:reverseLayout="true"
         app:stackFromEnd="true"
         tools:listitem="@layout/music_item" />
@@ -42,29 +42,36 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:fontFamily="@font/roboto_medium"
+        android:alpha="0.7"
+        android:drawableLeft="@drawable/ic_baseline_music_note_24"
+        android:drawableTint="@color/white"
+        android:paddingRight="2dp"
+        android:fontFamily="@font/prompt_semibold"
         android:text="แนะนำเลย!"
         android:textColor="@color/white"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintHorizontal_bias="0.052"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.257" />
+        app:layout_constraintVertical_bias="0.298" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:fontFamily="@font/roboto_medium"
+        android:alpha="0.7"
+        android:fontFamily="@font/prompt_semibold"
+        android:drawableLeft="@drawable/ic_baseline_new_releases_24"
+        android:paddingRight="4dp"
         android:text="มาใหม่ ไฟแรง!"
+        android:textSize="20dp"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.048"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.531" />
+        app:layout_constraintVertical_bias="0.626" />
 </androidx.constraintlayout.widget.ConstraintLayout>

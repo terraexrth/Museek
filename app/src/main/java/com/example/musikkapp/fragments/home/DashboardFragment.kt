@@ -1,11 +1,17 @@
 package com.example.musikkapp.fragments.home
 
+import android.app.Activity
+import android.app.PendingIntent.getActivity
+import android.content.Intent
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,10 +41,12 @@ class DashboardFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         mAuth = FirebaseAuth.getInstance()
         val currentUser = mAuth.currentUser
+        val mediaPlayer = MediaPlayer()
 
         musicRecRecyclerView = root.findViewById(R.id.musicList)
         musicRecRecyclerView.layoutManager = LinearLayoutManager(activity,
             RecyclerView.HORIZONTAL,false)
+
         musicRecRecyclerView.setHasFixedSize(true)
 
         musicRecArrayList = arrayListOf<Music>()
@@ -50,6 +58,14 @@ class DashboardFragment : Fragment() {
 
         musicNewArrayList = arrayListOf<Music>()
         getNewData()
+
+
+
+
+
+
+
+
 
         return root
     }
@@ -100,8 +116,10 @@ class DashboardFragment : Fragment() {
         })
     }
 
+    }
 
-}
+
+
 
 
 

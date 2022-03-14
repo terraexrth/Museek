@@ -21,6 +21,7 @@ class SignInActivity : AppCompatActivity() {
     }
     var logo : ImageView? = null
     private lateinit var mAuth: FirebaseAuth
+
     private lateinit var googleSignInClient: GoogleSignInClient
 
     var signInBtn : ImageView? = null
@@ -29,6 +30,7 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signin_act)
         init()
+
         logo = findViewById(R.id.logo) as ImageView
         logo!!.bringToFront()
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -46,7 +48,9 @@ class SignInActivity : AppCompatActivity() {
     private fun signIn() {
         val signInIntent = googleSignInClient.signInIntent
 
+
         startActivityForResult(signInIntent, RC_SIGN_IN)
+        googleSignInClient.revokeAccess()
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
