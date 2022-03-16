@@ -1,26 +1,29 @@
 package com.example.musikkapp.fragments.home
 
-import android.app.Activity
-import android.app.PendingIntent.getActivity
-import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.musikkapp.Communicator
 import com.example.musikkapp.R
+import com.example.musikkapp.fragments.player.PlayerFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 
+
+
+
 class DashboardFragment : Fragment() {
+
+    private lateinit var communicator: Communicator
     private lateinit var dashboardViewmodel: DashboardViewModel
     private lateinit var mAuth: FirebaseAuth
     private lateinit var dbRef: DatabaseReference
@@ -28,6 +31,7 @@ class DashboardFragment : Fragment() {
     private lateinit var musicRecArrayList: ArrayList<Music>
     private lateinit var musicNewRecyclerView: RecyclerView
     private lateinit var musicNewArrayList: ArrayList<Music>
+    var pos : Int? = null
     var rec1 : ImageView? = null
 
 
@@ -57,12 +61,8 @@ class DashboardFragment : Fragment() {
         musicNewRecyclerView.setHasFixedSize(true)
 
         musicNewArrayList = arrayListOf<Music>()
+        communicator = activity as Communicator
         getNewData()
-
-
-
-
-
 
 
 
@@ -82,7 +82,8 @@ class DashboardFragment : Fragment() {
                         musicRecArrayList.add(music!!)
 
                     }
-                    musicRecRecyclerView.adapter = MyAdapter(musicRecArrayList)
+
+                    //musicRecRecyclerView.adapter = MyAdapter(musicRecArrayList)
                 }
             }
 
@@ -105,7 +106,23 @@ class DashboardFragment : Fragment() {
                         musicNewArrayList.add(music!!)
 
                     }
-                    musicNewRecyclerView.adapter = MyAdapter(musicNewArrayList)
+                    var adapter = MyAdapter(musicNewArrayList)
+                    musicNewRecyclerView.adapter = adapter
+
+
+                    adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
+
+                        override fun onItemClick(position: Int) {
+
+                            communicator.passDataCom(position)
+                           // Toast.makeText(activity, "${adapter.getArraylist()[position].name}", Toast.LENGTH_SHORT).show()
+//                            (activity as FragmentActivity).supportFragmentManager.beginTransaction()
+//                                .replace(R.id.fragment_container, PlayerFragment()).addToBackStack(null)
+//                                .commit()
+                        }
+
+                    })
+
                 }
             }
 
@@ -116,7 +133,8 @@ class DashboardFragment : Fragment() {
         })
     }
 
-    }
+
+}
 
 
 

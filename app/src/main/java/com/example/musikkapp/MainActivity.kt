@@ -5,8 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
+import com.example.musikkapp.fragments.player.PlayerFragment
 import com.google.firebase.auth.FirebaseAuth
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +38,10 @@ class MainActivity : AppCompatActivity() {
            },2000)
 
     }
+
+
+
+
 
 }
 

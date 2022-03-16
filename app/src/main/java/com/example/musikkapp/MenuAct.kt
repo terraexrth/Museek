@@ -8,9 +8,11 @@ import android.os.Bundle
 import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
 
 import com.example.musikkapp.fragments.home.DashboardFragment
+import com.example.musikkapp.fragments.player.PlayerFragment
 import com.example.musikkapp.fragments.playlist.LibaryFragment
 import com.example.musikkapp.fragments.upload.UploadFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -19,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class MenuAct : AppCompatActivity() {
+class MenuAct : AppCompatActivity(),Communicator {
 
     private val dashboardFragment = DashboardFragment()
     private val uploadFragment = UploadFragment()
@@ -71,7 +73,7 @@ class MenuAct : AppCompatActivity() {
             bottom_navigation.setOnNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.ic_home -> replaceFragment(dashboardFragment)
-                    R.id.ic_upload -> replaceFragment(libaryFragment)
+                    R.id.ic_lib -> replaceFragment(libaryFragment)
                 }
                 true
             }
@@ -87,4 +89,16 @@ class MenuAct : AppCompatActivity() {
             transaction.commit()
         }
     }
+    override fun passDataCom(position: Int) {
+        val bundle = Bundle()
+        bundle.putInt("pos",position)
+
+        val transaction = this.supportFragmentManager.beginTransaction()
+        val playerFragment = PlayerFragment()
+        playerFragment.arguments = bundle
+
+        transaction.replace(R.id.fragment_container,playerFragment).addToBackStack(null).commit()
+    }
+
+
 }

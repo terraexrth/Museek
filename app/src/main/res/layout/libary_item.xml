@@ -29,6 +29,7 @@
                 android:layout_width="303dp"
                 android:layout_height="30dp"
                 android:text="SONG NAME"
+                android:textColor="@color/white"
                 android:textSize="18dp"
                 android:fontFamily="@font/prompt_semibold"
                 android:paddingLeft="8dp" />
@@ -38,6 +39,7 @@
                 android:layout_width="303dp"
                 android:layout_height="30dp"
                 android:text="TERRA"
+                android:textColor="@color/white"
                 android:textSize="15dp"
                 android:fontFamily="@font/prompt_semibold"
                 android:paddingLeft="8dp" />

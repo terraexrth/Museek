@@ -3,6 +3,7 @@ package com.example.musikkapp.fragments.upload
 import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.musikkapp.R
 import com.example.musikkapp.fragments.home.DashboardFragment
+import com.example.musikkapp.fragments.playlist.LibaryFragment
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.net.MediaType
@@ -22,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 class UploadFragment : Fragment() {
@@ -94,7 +97,7 @@ class UploadFragment : Fragment() {
 
     fun replaceFragment() {
         val transaction = activity?.supportFragmentManager?.beginTransaction()
-        transaction!!.replace(R.id.fragment_container, DashboardFragment())
+        transaction!!.replace(R.id.fragment_container, LibaryFragment())
         transaction.disallowAddToBackStack()
         transaction.commit()
 
@@ -140,7 +143,6 @@ class UploadFragment : Fragment() {
             selectBtn!!.visibility = View.VISIBLE
             textUpload!!.visibility = View.VISIBLE
 
-            if (progressDialog.isShowing) progressDialog.dismiss()
 
         }.addOnFailureListener {
             if (progressDialog.isShowing) progressDialog.dismiss()
@@ -156,15 +158,26 @@ class UploadFragment : Fragment() {
                     .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .child("User").child(currentUser?.uid.toString()).child("$audName")
                 // val hashMap2: HashMap<String, String> = HashMap()
+                var mp : MediaPlayer = MediaPlayer.create(activity,AudioUri)
+                var duration = mp.duration.toLong()
+                mp.release()
+
+
+             /*   */
+
                 hashMap1.put("songUrl", uri.toString())
+
+
                 dbRef2.setValue(hashMap1)
                 usRef.setValue(hashMap1)
             })
             title!!.setText("")
             if (progressDialog.isShowing) progressDialog.dismiss()
             Toast.makeText(activity, "อัพโหลดเสร็จสิ้น", Toast.LENGTH_SHORT).show()
+            replaceFragment()
+
         }
-        //replaceFragment()
+
 
     }
 
