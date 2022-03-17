@@ -89,9 +89,9 @@ class MenuAct : AppCompatActivity(),Communicator {
             transaction.commit()
         }
     }
-    override fun passDataCom(position: Int) {
+    override fun passDataCom(position: String?) {
         val bundle = Bundle()
-        bundle.putInt("pos",position)
+        bundle.putString("name",position)
 
         val transaction = this.supportFragmentManager.beginTransaction()
         val playerFragment = PlayerFragment()

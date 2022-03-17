@@ -36,7 +36,7 @@ class UploadFragment : Fragment() {
     var selectAudio: ImageView? = null
     var imgStore: ImageView? = null
     var fileLoc: TextView? = null
-    var back:TextView? = null
+    var back: TextView? = null
     var title: EditText? = null
     var textUpload: ImageView? = null
     lateinit var ImgUri: Uri
@@ -132,7 +132,7 @@ class UploadFragment : Fragment() {
                 hashMap1.put("name", audName.toString())
                 hashMap1.put("artist", currentUser?.displayName.toString())
                 hashMap1.put("coverUrl", uri.toString())
-                hashMap1.put("timestamp",now.toString())
+                hashMap1.put("timestamp", now.toString())
 
 
                 dbRef.setValue(hashMap1)
@@ -158,12 +158,12 @@ class UploadFragment : Fragment() {
                     .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
                     .child("User").child(currentUser?.uid.toString()).child("$audName")
                 // val hashMap2: HashMap<String, String> = HashMap()
-                var mp : MediaPlayer = MediaPlayer.create(activity,AudioUri)
+                var mp: MediaPlayer = MediaPlayer.create(activity, AudioUri)
                 var duration = mp.duration.toLong()
                 mp.release()
 
 
-             /*   */
+                /*   */
 
                 hashMap1.put("songUrl", uri.toString())
 
@@ -210,7 +210,7 @@ class UploadFragment : Fragment() {
         if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK) {
             AudioUri = data?.data!!
             selectAudio!!.visibility = View.GONE
-            fileLoc!!.text = ("File Location :  ${AudioUri.toString()}")
+            fileLoc!!.text = ("File Location :  $AudioUri")
 
         }
     }

@@ -1,29 +1,35 @@
 package com.example.musikkapp.fragments.player
 
+import android.content.ComponentName
+import android.content.Context.BIND_AUTO_CREATE
+import android.content.Intent
+import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.musikkapp.MusicService
 import com.example.musikkapp.R
 import com.example.musikkapp.fragments.home.Music
 import com.example.musikkapp.fragments.home.MyAdapter
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import jp.wasabeef.glide.transformations.BlurTransformation
-import java.lang.Exception
 
-class PlayerFragment : Fragment() {
-    companion object{
-        var mediaPlayer : MediaPlayer? = null
+class PlayerFragment : Fragment(),ServiceConnection{
+    companion object {
+        var mediaPlayer: MediaPlayer? = null
         private lateinit var musicArrayList: ArrayList<Music>
+        var musicService:MusicService? = null
     }
 
     private lateinit var mAuth: FirebaseAuth
@@ -32,12 +38,15 @@ class PlayerFragment : Fragment() {
     private lateinit var viewModel: PlayerViewModel
     var cover: ImageView? = null
     var bg: ImageView? = null
-    var pos: Int? = null
+    var name: String? = null
     var title_name: TextView? = null
     var artist_name: TextView? = null
     var playB: ImageView? = null
-    var isPlaying : Boolean = false
-
+    var nextB: ImageView? = null
+    var prevB: ImageView? = null
+    var isPlaying: Boolean = false
+    var songPos:Int = 0
+    var pos:Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,12 +58,15 @@ class PlayerFragment : Fragment() {
         mAuth = FirebaseAuth.getInstance()
         val currentUser = mAuth.currentUser
 
+
+
         cover = root.findViewById(R.id.playerCover) as ImageView
         title_name = root.findViewById(R.id.title_player) as TextView
         artist_name = root.findViewById(R.id.artist_player) as TextView
         playB = root.findViewById(R.id.playB) as ImageView
-
         bg = root.findViewById(R.id.background) as ImageView
+        nextB = root.findViewById(R.id.nextB) as ImageView
+        prevB = root.findViewById(R.id.prevB) as ImageView
         musicArrayList = arrayListOf<Music>()
 
 
@@ -73,25 +85,56 @@ class PlayerFragment : Fragment() {
                     }
 
                     var adapter = MyAdapter(musicArrayList)
-                    pos = arguments?.getInt("pos")
+                    name = arguments?.getString("name").toString()
+                    var index = adapter.getArraylist().size -1
+                    for(i in 0..index){
+                        if(name.equals(adapter.getArraylist()[i].name)){
+                            pos = i
+                            //Toast.makeText(activity, "${adapter.getArraylist()[i].name} + $pos + $name", Toast.LENGTH_SHORT).show()
 
-                    activity?.let {
-                        Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).into(cover!!)
-                        Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).apply(
-                            RequestOptions.bitmapTransform(BlurTransformation(25, 3))).into(bg!!)
+                        }
                     }
+                    songPos+= pos
 
-                    title_name!!.text = adapter.getArraylist()[pos!!].name
-                    artist_name!!.text = adapter.getArraylist()[pos!!].artist
-                    createMediaPlayer(adapter, pos!!)
-                    playB!!.setOnClickListener{
-                        if(isPlaying){
+                    setLayout(adapter,songPos)
+//                    activity?.let {
+//                        Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).into(cover!!)
+//                        Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).apply(
+//                            RequestOptions.bitmapTransform(BlurTransformation(25, 3))).into(bg!!)
+//                    }
+//
+//                    title_name!!.text = adapter.getArraylist()[pos!!].name
+//                    artist_name!!.text = adapter.getArraylist()[pos!!].artist
+                    createMediaPlayer(adapter, songPos)
+                    playB!!.setOnClickListener {
+
+                        if (isPlaying) {
                             pauseMusic()
-                        }else{
+                        } else {
                             playMusic()
                         }
                     }
+                    nextB!!.setOnClickListener {
+                        if(songPos>= musicArrayList.size-1){
+                            songPos = 0
+                            prevNextSong(adapter,increment = true, songPos)
+                        }
+                        else{
+                            prevNextSong(adapter,increment = true, ++songPos)
+                        }
 
+
+
+                    }
+
+                    prevB!!.setOnClickListener {
+                        if(songPos!=0){
+                        (prevNextSong(adapter,increment = false,--songPos))
+                    }else{
+                            songPos= (musicArrayList.size)-1
+                            (prevNextSong(adapter,increment = false,songPos))
+                        }
+                       }
                 }
             }
 
@@ -101,36 +144,68 @@ class PlayerFragment : Fragment() {
 
         })
 
-
-
-
         return root
     }
-    private fun createMediaPlayer(adapter: MyAdapter,pos : Int){
-        try{
-            if(mediaPlayer == null) {
-                mediaPlayer = MediaPlayer()
-                mediaPlayer!!.reset()
-                mediaPlayer!!.setDataSource(adapter.getArraylist()[pos!!].songUrl)
-                mediaPlayer!!.prepare()
-                mediaPlayer!!.start()
-                isPlaying = true
-                playB!!.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
-            }
-        }catch(e : Exception){return}
+
+    private fun setLayout(adapter : MyAdapter,pos: Int) {
+        activity?.let {
+            Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).into(cover!!)
+            Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).apply(
+                RequestOptions.bitmapTransform(BlurTransformation(25, 3))
+            ).into(bg!!)
+        }
+
+        title_name!!.text = adapter.getArraylist()[pos!!].name
+        artist_name!!.text = adapter.getArraylist()[pos!!].artist
     }
-    private fun playMusic(){
+
+    private fun createMediaPlayer(adapter: MyAdapter, pos: Int) {
+        if(mediaPlayer!=null){
+                mediaPlayer!!.stop();
+                mediaPlayer!!.release();
+        }
+            mediaPlayer = MediaPlayer()
+            mediaPlayer!!.reset()
+            mediaPlayer!!.setDataSource(adapter.getArraylist()[pos].songUrl)
+            mediaPlayer!!.prepare()
+            mediaPlayer!!.start()
+            isPlaying = true
+            playB!!.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
+
+
+    }
+    private fun playMusic() {
         playB!!.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
         isPlaying = true
         mediaPlayer!!.start()
     }
-    private fun pauseMusic(){
+
+    private fun pauseMusic() {
         playB!!.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
         isPlaying = false
+
         mediaPlayer!!.pause()
     }
+    private fun prevNextSong(adapter: MyAdapter,increment: Boolean, pos: Int){
 
+        if(increment){
+            setLayout(adapter,pos)
+            createMediaPlayer(adapter,pos)
+        }
+        else{
+            setLayout(adapter,pos)
+            createMediaPlayer(adapter,pos)
+        }
+    }
 
+    override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+        val binder = p1 as MusicService.MyBinder
+        musicService = binder.currentService()
+    }
+
+    override fun onServiceDisconnected(p0: ComponentName?) {
+        musicService = null
+    }
 
 
 }

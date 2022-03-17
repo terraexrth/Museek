@@ -7,18 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musikkapp.Communicator
 import com.example.musikkapp.R
-import com.example.musikkapp.fragments.player.PlayerFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-
-
-
 
 
 class DashboardFragment : Fragment() {
@@ -70,7 +65,7 @@ class DashboardFragment : Fragment() {
         return root
     }
     private fun getUserData(){
-        dbRef = FirebaseDatabase.getInstance().getReference("Music").child("Recommend")
+        dbRef = FirebaseDatabase.getInstance().getReference("Music").child("Rec")
 
         dbRef.addValueEventListener(object : ValueEventListener{
 
@@ -82,8 +77,21 @@ class DashboardFragment : Fragment() {
                         musicRecArrayList.add(music!!)
 
                     }
+                    var adapter = MyAdapter(musicRecArrayList)
+                    musicRecRecyclerView.adapter = adapter
 
-                    //musicRecRecyclerView.adapter = MyAdapter(musicRecArrayList)
+                    adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
+
+                        override fun onItemClick(position: Int) {
+
+                            communicator.passDataCom(adapter.getArraylist()[position].name)
+                            // Toast.makeText(activity, "${adapter.getArraylist()[position].name}", Toast.LENGTH_SHORT).show()
+//                            (activity as FragmentActivity).supportFragmentManager.beginTransaction()
+//                                .replace(R.id.fragment_container, PlayerFragment()).addToBackStack(null)
+//                                .commit()
+                        }
+
+                    })
                 }
             }
 
@@ -114,7 +122,7 @@ class DashboardFragment : Fragment() {
 
                         override fun onItemClick(position: Int) {
 
-                            communicator.passDataCom(position)
+                            communicator.passDataCom(adapter.getArraylist()[position].name)
                            // Toast.makeText(activity, "${adapter.getArraylist()[position].name}", Toast.LENGTH_SHORT).show()
 //                            (activity as FragmentActivity).supportFragmentManager.beginTransaction()
 //                                .replace(R.id.fragment_container, PlayerFragment()).addToBackStack(null)

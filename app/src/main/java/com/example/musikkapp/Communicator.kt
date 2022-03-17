@@ -1,5 +1,5 @@
 package com.example.musikkapp
 
 interface Communicator {
-    fun passDataCom(position:Int)
+    fun passDataCom(position: String?)
 }

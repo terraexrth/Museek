@@ -21,4 +21,7 @@
 
 
     </style>
+    <style name="bottomFont">
+        <item name="fontFamily">@font/prompt_thin</item>
+    </style>
 </resources>
