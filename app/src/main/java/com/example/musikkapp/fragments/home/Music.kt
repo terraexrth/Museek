@@ -11,6 +11,7 @@ data class Music(
     var coverUrl: String? = null,
     var name: String? = null,
     var artist: String? = null,
+    var views: String? = null,
 
 
 

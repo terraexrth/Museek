@@ -1,17 +1,18 @@
 package com.example.musikkapp.fragments.home
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musikkapp.Communicator
 import com.example.musikkapp.R
+import com.example.musikkapp.fragments.player.PlayerFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -40,7 +41,7 @@ class DashboardFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
         mAuth = FirebaseAuth.getInstance()
         val currentUser = mAuth.currentUser
-        val mediaPlayer = MediaPlayer()
+
 
         musicRecRecyclerView = root.findViewById(R.id.musicList)
         musicRecRecyclerView.layoutManager = LinearLayoutManager(activity,
@@ -49,7 +50,7 @@ class DashboardFragment : Fragment() {
         musicRecRecyclerView.setHasFixedSize(true)
 
         musicRecArrayList = arrayListOf<Music>()
-        getUserData()
+
 
         musicNewRecyclerView = root.findViewById(R.id.musicList2)
         musicNewRecyclerView.layoutManager = LinearLayoutManager(activity,RecyclerView.HORIZONTAL,false)
@@ -58,14 +59,15 @@ class DashboardFragment : Fragment() {
         musicNewArrayList = arrayListOf<Music>()
         communicator = activity as Communicator
         getNewData()
+        getRecData()
 
 
 
 
         return root
     }
-    private fun getUserData(){
-        dbRef = FirebaseDatabase.getInstance().getReference("Music").child("Rec")
+    private fun getRecData(){
+        dbRef = FirebaseDatabase.getInstance().getReference("Music").child("New")
 
         dbRef.addValueEventListener(object : ValueEventListener{
 
@@ -74,10 +76,13 @@ class DashboardFragment : Fragment() {
                     for(userSnapshot in snapshot.children){
 
                         val music = userSnapshot.getValue(Music::class.java)
+                        if(music!!.views!!.toInt() != 0)
                         musicRecArrayList.add(music!!)
 
                     }
-                    var adapter = MyAdapter(musicRecArrayList)
+                    musicRecArrayList.sortWith(compareBy{it.views!!.toInt()})
+                    musicRecArrayList.reverse()
+                    val adapter = MyAdapter(musicRecArrayList)
                     musicRecRecyclerView.adapter = adapter
 
                     adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
@@ -85,10 +90,7 @@ class DashboardFragment : Fragment() {
                         override fun onItemClick(position: Int) {
 
                             communicator.passDataCom(adapter.getArraylist()[position].name)
-                            // Toast.makeText(activity, "${adapter.getArraylist()[position].name}", Toast.LENGTH_SHORT).show()
-//                            (activity as FragmentActivity).supportFragmentManager.beginTransaction()
-//                                .replace(R.id.fragment_container, PlayerFragment()).addToBackStack(null)
-//                                .commit()
+
                         }
 
                     })
@@ -114,19 +116,17 @@ class DashboardFragment : Fragment() {
                         musicNewArrayList.add(music!!)
 
                     }
-                    var adapter = MyAdapter(musicNewArrayList)
+                    val adapter = MyAdapter(musicNewArrayList)
                     musicNewRecyclerView.adapter = adapter
 
 
                     adapter.setOnItemClickListener(object : MyAdapter.onItemClickListener{
 
                         override fun onItemClick(position: Int) {
-
+                           // viewer(musicNewArrayList,position)
                             communicator.passDataCom(adapter.getArraylist()[position].name)
-                           // Toast.makeText(activity, "${adapter.getArraylist()[position].name}", Toast.LENGTH_SHORT).show()
-//                            (activity as FragmentActivity).supportFragmentManager.beginTransaction()
-//                                .replace(R.id.fragment_container, PlayerFragment()).addToBackStack(null)
-//                                .commit()
+
+
                         }
 
                     })
@@ -140,9 +140,18 @@ class DashboardFragment : Fragment() {
 
         })
     }
+     fun viewer(mArray : ArrayList<Music>,position: Int){
+        var popularity = mArray[position].views.toString().toInt()
+        popularity+=1
+        val dbRef2: DatabaseReference = FirebaseDatabase.getInstance()
+            .getReferenceFromUrl("https://museek-a09de-default-rtdb.asia-southeast1.firebasedatabase.app")
+            .child("Music").child("New").child(mArray[position].name.toString()).child("views")
 
+        dbRef2.setValue(popularity.toString())
+    }
 
 }
+
 
 
 

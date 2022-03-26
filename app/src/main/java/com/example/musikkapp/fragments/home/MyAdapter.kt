@@ -17,7 +17,6 @@ import com.example.musikkapp.fragments.upload.UploadFragment
 
 
 class MyAdapter(private val musicList : ArrayList<Music>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>(){
-    var pos: Int? =null
     private  lateinit var mListener: onItemClickListener
 
     interface onItemClickListener{
@@ -33,7 +32,6 @@ class MyAdapter(private val musicList : ArrayList<Music>) : RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.music_item,parent,false)
-
         return MyViewHolder(itemView,mListener)
     }
 

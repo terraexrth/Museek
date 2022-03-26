@@ -10,10 +10,12 @@ import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import com.bumptech.glide.Glide
+import com.example.musikkapp.fragments.Card.CardFragment
 
 import com.example.musikkapp.fragments.home.DashboardFragment
 import com.example.musikkapp.fragments.player.PlayerFragment
 import com.example.musikkapp.fragments.playlist.LibaryFragment
+import com.example.musikkapp.fragments.search.SearchFragment
 import com.example.musikkapp.fragments.upload.UploadFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +27,7 @@ class MenuAct : AppCompatActivity(),Communicator {
 
     private val dashboardFragment = DashboardFragment()
     private val uploadFragment = UploadFragment()
+    private val searchFragment = SearchFragment()
     private val libaryFragment = LibaryFragment()
     var profileImg: ImageView? = null
     private lateinit var mAuth: FirebaseAuth
@@ -73,6 +76,7 @@ class MenuAct : AppCompatActivity(),Communicator {
             bottom_navigation.setOnNavigationItemSelectedListener {
                 when (it.itemId) {
                     R.id.ic_home -> replaceFragment(dashboardFragment)
+                    R.id.ic_search -> replaceFragment(searchFragment)
                     R.id.ic_lib -> replaceFragment(libaryFragment)
                 }
                 true

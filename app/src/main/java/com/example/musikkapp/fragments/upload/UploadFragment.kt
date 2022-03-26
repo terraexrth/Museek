@@ -133,6 +133,7 @@ class UploadFragment : Fragment() {
                 hashMap1.put("artist", currentUser?.displayName.toString())
                 hashMap1.put("coverUrl", uri.toString())
                 hashMap1.put("timestamp", now.toString())
+                hashMap1.put("views","0")
 
 
                 dbRef.setValue(hashMap1)

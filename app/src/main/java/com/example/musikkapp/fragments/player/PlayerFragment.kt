@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -24,6 +26,7 @@ import com.example.musikkapp.fragments.home.MyAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import jp.wasabeef.glide.transformations.BlurTransformation
+import java.lang.Exception
 
 class PlayerFragment : Fragment(),ServiceConnection{
     companion object {
@@ -36,6 +39,9 @@ class PlayerFragment : Fragment(),ServiceConnection{
     private lateinit var dbRef: DatabaseReference
     private lateinit var postRef: DatabaseReference
     private lateinit var viewModel: PlayerViewModel
+    private lateinit var runnable: Runnable
+    private var handler = Handler()
+    var seekbar:SeekBar? = null
     var cover: ImageView? = null
     var bg: ImageView? = null
     var name: String? = null
@@ -68,7 +74,7 @@ class PlayerFragment : Fragment(),ServiceConnection{
         nextB = root.findViewById(R.id.nextB) as ImageView
         prevB = root.findViewById(R.id.prevB) as ImageView
         musicArrayList = arrayListOf<Music>()
-
+        seekbar = root.findViewById<SeekBar>(R.id.seekBar2)
 
         dbRef = FirebaseDatabase.getInstance().getReference("Music").child("New")
 
@@ -86,6 +92,7 @@ class PlayerFragment : Fragment(),ServiceConnection{
 
                     var adapter = MyAdapter(musicArrayList)
                     name = arguments?.getString("name").toString()
+
                     var index = adapter.getArraylist().size -1
                     for(i in 0..index){
                         if(name.equals(adapter.getArraylist()[i].name)){
@@ -97,6 +104,7 @@ class PlayerFragment : Fragment(),ServiceConnection{
                     songPos+= pos
 
                     setLayout(adapter,songPos)
+
 //                    activity?.let {
 //                        Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).into(cover!!)
 //                        Glide.with(it).load(adapter.getArraylist()[pos!!].coverUrl).apply(
@@ -106,6 +114,9 @@ class PlayerFragment : Fragment(),ServiceConnection{
 //                    title_name!!.text = adapter.getArraylist()[pos!!].name
 //                    artist_name!!.text = adapter.getArraylist()[pos!!].artist
                     createMediaPlayer(adapter, songPos)
+
+
+
                     playB!!.setOnClickListener {
 
                         if (isPlaying) {
@@ -157,23 +168,67 @@ class PlayerFragment : Fragment(),ServiceConnection{
 
         title_name!!.text = adapter.getArraylist()[pos!!].name
         artist_name!!.text = adapter.getArraylist()[pos!!].artist
+
     }
 
     private fun createMediaPlayer(adapter: MyAdapter, pos: Int) {
         if(mediaPlayer!=null){
                 mediaPlayer!!.stop();
                 mediaPlayer!!.release();
+
         }
             mediaPlayer = MediaPlayer()
             mediaPlayer!!.reset()
             mediaPlayer!!.setDataSource(adapter.getArraylist()[pos].songUrl)
             mediaPlayer!!.prepare()
             mediaPlayer!!.start()
+
             isPlaying = true
             playB!!.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
+            seekbar!!.progress = 0
+            seekbar!!.max = mediaPlayer!!.duration
+
+            seekbar!!.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+                override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
+                    if(p2){
+                        mediaPlayer!!.seekTo(p1)
+                    }
+                }
+
+                override fun onStartTrackingTouch(p0: SeekBar?) {
+
+                }
+
+                override fun onStopTrackingTouch(p0: SeekBar?) {
+
+                }
+
+            })
+
+            runnable = Runnable {
+                seekbar!!.progress = mediaPlayer!!.currentPosition
+                handler.postDelayed(runnable,1000)
+
+            }
+            handler.postDelayed(runnable,1000)
+            mediaPlayer!!.setOnCompletionListener {
+                mediaPlayer!!.pause()
+
+                playB!!.setImageResource(R.drawable.ic_baseline_play_circle_filled_24)
+                if(songPos>= musicArrayList.size-1){
+                    songPos = 0
+                    prevNextSong(adapter,increment = true, songPos)
+                }
+                else{
+                    prevNextSong(adapter,increment = true, ++songPos)
+                }
+
+            }
+
 
 
     }
+
     private fun playMusic() {
         playB!!.setImageResource(R.drawable.ic_baseline_pause_circle_filled_24)
         isPlaying = true

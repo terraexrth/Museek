@@ -38,6 +38,9 @@ class LibAdapter(private val musicList : ArrayList<Music>) : RecyclerView.Adapte
 
 
     }
+    fun getArraylist(): ArrayList<Music> {
+        return musicList
+    }
 
 
 }
