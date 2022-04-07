@@ -16,6 +16,7 @@ import com.example.musikkapp.Communicator
 import com.example.musikkapp.R
 import com.example.musikkapp.fragments.home.Music
 import com.example.musikkapp.fragments.home.MyAdapter
+import com.example.musikkapp.fragments.playlist.DeleteModal
 import com.example.musikkapp.fragments.playlist.LibAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -73,6 +74,7 @@ class SearchFragment : Fragment() {
 
                                         adapter.setOnSearchClickListener(object : SearchAdapter.onSearchClickListener{
                                             override fun onItemClick(position: Int) {
+
                                                 communicator.passDataCom(adapter.getArraylist()[position].name)
                                             }
 
